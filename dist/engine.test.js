@@ -1,0 +1,33 @@
+import assert from 'node:assert/strict';
+import { overlaps, conflicts, solve, validateModule } from './engine.js';
+
+const session = (day, start, end, weeks) => ({ day, start, end, ...(weeks ? { weeks } : {}) });
+const module = (code, indexes, extra = {}) => ({ code, indexes: indexes.map(([id, sessions]) => ({ id, sessions })), ...extra });
+const a = session(0, 540, 600);
+assert.equal(overlaps(a, session(0, 570, 630)), true);
+assert.equal(overlaps(a, session(0, 600, 660)), false, 'Adjacent sessions do not overlap');
+assert.equal(overlaps(a, session(1, 540, 600)), false);
+assert.equal(overlaps(session(0, 540, 600, [1, 3]), session(0, 540, 600, [2, 4])), false);
+assert.equal(overlaps(a, session(0, 540, 600, [2])), true, 'Missing weeks mean every week');
+assert.equal(conflicts([a, session(0, 570, 630)], [session(0, 550, 560)]).length, 2);
+assert.equal(conflicts([a], [session(0, 600, 660)]).length, 0);
+assert.equal(validateModule(module('A', [['1', [a]]])).valid, true);
+assert.equal(validateModule(module('A', [['1', [session(0, 600, 500)]]])).valid, false);
+assert.equal(validateModule(module('A', [['1', [a]]], { locked: true, selected: '2' })).valid, false);
+
+const modules = [module('A', [['1', [a]], ['2', [session(1, 540, 600)]]]), module('B', [['3', [session(0, 570, 630)]], ['4', [session(0, 600, 660)]]])];
+const found = solve(modules);
+assert.equal(found.solutions.length, 3);
+assert.deepEqual(found.solutions[0].selections, { A: '1', B: '4' }, 'Adjacent sessions on one day rank first');
+assert.equal(found.truncated, false);
+assert.equal(solve(modules, [session(0, 530, 700)]).solutions.length, 0);
+const locked = solve([modules[0], { ...modules[1], selected: '3', locked: true }]);
+assert.deepEqual(locked.solutions.map(s => s.selections), [{ A: '2', B: '3' }]);
+assert.equal(solve([{ ...modules[0], selected: '1', locked: true }, { ...modules[1], selected: '3', locked: true }]).solutions.length, 0);
+assert.equal(solve([module('A', [['1', [session(0, 540, 600, [1])]]]), module('B', [['2', [session(0, 540, 600, [2])]]])]).solutions.length, 1);
+assert.equal(solve(modules, [], { maxResults: 1 }).solutions.length, 1);
+assert.deepEqual(solve(modules), solve(modules), 'Results are deterministic');
+assert.equal(solve([module('A', [['1', [a, session(0, 570, 620)]]])]).solutions.length, 0, 'An index must be internally clash-free');
+assert.equal(solve([modules[0], modules[0]]).solutions.length, 0, 'Duplicate codes are rejected');
+assert.equal(solve(modules, [session(5, 540, 600)]).solutions.length, 0);
+console.log('Timetable engine: all checks passed.');
