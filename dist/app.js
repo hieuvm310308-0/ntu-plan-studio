@@ -2,6 +2,7 @@ import {catalog as officialCatalog,catalogMetadata,initialSelections} from './ca
 import {upgradeState} from './state.js';
 import {conflicts,solve} from './engine.js';
 import {recognizeImage,parseImportText,parseCatalogJSON} from './import.js';
+import {mountChat} from './chat.js';
 const $=s=>document.querySelector(s), days=['Monday','Tuesday','Wednesday','Thursday','Friday','Saturday','Sunday'];
 const esc=v=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const time=n=>`${String(Math.floor(n/60)).padStart(2,'0')}:${String(n%60).padStart(2,'0')}`;
@@ -14,18 +15,18 @@ if(!state.plans.some(p=>p.id===state.active))state.active=state.plans[0].id;
 const plan=()=>state.plans.find(p=>p.id===state.active);
 const modules=()=>plan().modules.map(x=>({...state.catalog.find(m=>m.code===x.code),...x})).filter(m=>m.indexes);
 const sessions=()=>modules().flatMap(m=>(m.indexes.find(i=>i.id===m.selected)?.sessions||[]).map(s=>({...s,code:m.code,indexId:m.selected,title:m.title,color:m.color||'#789a7b'})));
-let solutions=[],toastTimer,activeWeek='all';
+let solutions=[],toastTimer,activeWeek='all',aiChat;
 function toast(text){$('#toast').textContent=text;$('#toast').classList.add('show');clearTimeout(toastTimer);toastTimer=setTimeout(()=>$('#toast').classList.remove('show'),4000)}
 function save(){try{localStorage.setItem('ntu-plan-v2',JSON.stringify(state))}catch{toast('Storage is full or unavailable. Export your plans to keep them.')}solutions=[];render()}
 function modal(title,body){$('#modal-title').textContent=title;$('#modal-content').innerHTML=body;$('#modal').showModal()}
 $('#close-modal').onclick=()=>$('#modal').close();
 $('#modal').addEventListener('click',e=>{if(e.target===$('#modal')){const r=e.target.getBoundingClientRect();if(e.clientX<r.left||e.clientX>r.right||e.clientY<r.top||e.clientY>r.bottom)e.target.close()}});
 for(let i=1;i<=13;i++)$('#week-filter').insertAdjacentHTML('beforeend',`<option value="${i}">Teaching week ${i}</option>`);
-$('#week-filter').onchange=e=>{activeWeek=e.target.value;renderCalendar()};
+$('#week-filter').onchange=e=>{activeWeek=e.target.value;renderCalendar();aiChat?.refreshContext()};
 function render(){
  $('#plan-tabs').innerHTML=state.plans.map(p=>`<button class="plan-tab ${p.id===state.active?'active':''}" data-plan="${esc(p.id)}">${esc(p.name)}</button>`).join('');
  $('#plan-tabs').querySelectorAll('button').forEach(b=>b.onclick=()=>{state.active=b.dataset.plan;save()});
- renderCalendar();renderModules();renderBlocks();renderBrowse();$('#solver-results').innerHTML='';
+ renderCalendar();renderModules();renderBlocks();renderBrowse();$('#solver-results').innerHTML='';aiChat?.refreshContext();
 }
 function renderCalendar(){
  const all=sessions(),shown=all.filter(s=>activeWeek==='all'||!s.weeks||s.weeks.includes(+activeWeek));
@@ -58,7 +59,9 @@ function renderModules(){
 function addModule(code){if(plan().modules.some(m=>m.code===code))return toast('That module is already in your plan.');const m=state.catalog.find(m=>m.code===code);plan().modules.push({code,selected:m.indexes[0].id,locked:false});save();toast(code+' added to your plan')}
 function searchModules(){const query=$('#module-search').value.trim().toLowerCase();$('#search-results').innerHTML=query?state.catalog.filter(m=>(m.code+' '+m.title).toLowerCase().includes(query)&&!plan().modules.some(p=>p.code===m.code)).map(m=>`<div class="search-result"><div><b>${esc(m.code)}</b><small>${esc(m.title)}</small></div><button data-add="${esc(m.code)}" aria-label="Add ${esc(m.code)}">＋</button></div>`).join('')||'<p class="empty">No matching modules available to add.</p>':'';$('#search-results').querySelectorAll('button').forEach(b=>b.onclick=()=>addModule(b.dataset.add))}
 $('#module-search').oninput=searchModules;
-document.querySelectorAll('[data-panel]').forEach(b=>b.onclick=()=>{document.querySelectorAll('[data-panel]').forEach(x=>x.classList.toggle('active',x===b));$('#module-panel').hidden=b.dataset.panel!=='modules';$('#preferences-panel').hidden=b.dataset.panel!=='preferences'});
+function setPanel(panel){document.querySelectorAll('[data-panel]').forEach(x=>x.classList.toggle('active',x.dataset.panel===panel));$('#module-panel').hidden=panel!=='modules';$('#preferences-panel').hidden=panel!=='preferences';$('#chat-panel').hidden=panel!=='chat';$('.smart-card').hidden=panel==='chat';$('#solver-results').hidden=panel==='chat';$('.side-help').hidden=panel==='chat';aiChat?.refreshContext()}
+document.querySelectorAll('[data-panel]').forEach(b=>b.onclick=()=>setPanel(b.dataset.panel));
+$('#open-chat').onclick=()=>{$('[data-view="timetable"]').click();setPanel('chat');$('#chat-input').focus()};
 $('#new-plan').onclick=()=>{state.plans.push({id:uid(),name:'Plan '+(state.plans.length+1),modules:structuredClone(plan().modules),blocks:structuredClone(plan().blocks)});state.active=state.plans.at(-1).id;save();toast('Created a backup copy of your plan')};
 $('#clear-plan').onclick=()=>{modal('Clear this plan?',`<p class="modal-copy">Remove all modules and protected periods from ${esc(plan().name)}. Your other plans are kept.</p><div class="modal-actions"><button class="button" id="cancel-clear">Cancel</button><button class="button primary" id="confirm-clear">Clear plan</button></div>`);$('#cancel-clear').onclick=()=>$('#modal').close();$('#confirm-clear').onclick=()=>{plan().modules=[];plan().blocks=[];save();$('#modal').close()}};
 function renderBlocks(){$('#block-list').innerHTML=plan().blocks.map(b=>`<div class="block-row"><div>${esc(b.label)}<small>${days[b.day]} · ${time(b.start)}–${time(b.end)}</small></div><button data-del="${esc(b.id)}" aria-label="Remove ${esc(b.label)}">×</button></div>`).join('');$('#block-list').querySelectorAll('button').forEach(b=>b.onclick=()=>{plan().blocks=plan().blocks.filter(x=>x.id!==b.dataset.del);save()})}
@@ -80,3 +83,4 @@ render();
 
 $('#data-summary').innerHTML=`<strong>Official NTU schedule · AY ${esc(catalogMetadata.academicYear)} S${catalogMetadata.semester}</strong> ${catalogMetadata.moduleCount} modules · ${catalogMetadata.indexCount} indexes · Updated ${new Date(catalogMetadata.retrievedAt).toLocaleDateString('en-SG',{timeZone:'Asia/Singapore',day:'numeric',month:'short',year:'numeric'})}.<br>CS, CE &amp; DSAI · Years 1–4 · <a href="${esc(catalogMetadata.source)}" target="_blank" rel="noreferrer">Check official schedule ↗</a>. Final vacancies and registration: STARS.`;
 if(migratedChoices)toast(`${migratedChoices} demo or unavailable index choices removed. Your plans and protected time were kept; your previous backup remains on this device.`);
+aiChat=mountChat({getState:()=>state,metadata:catalogMetadata,getWeek:()=>activeWeek,notify:toast,onApply:updated=>{state=updated;save()},onInspect:context=>{modal('What Gemma receives','<p class="modal-copy">Each message sends fresh context for every saved plan, classes, locks, protected time, clashes, and alternative indexes for your modules. Your key is sent only to Google as a request header.</p><pre id="context-preview" class="context-preview"></pre>');$('#context-preview').textContent=JSON.stringify(context,null,2)}});

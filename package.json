@@ -1,1 +1,1 @@
-{"name":"ntu-plan-studio","private":true,"type":"module","scripts":{"test":"node dist/engine.test.js && node dist/import.test.js && node integration.test.mjs","start":"node server.mjs"}}
+{"name":"ntu-plan-studio","private":true,"type":"module","scripts":{"test":"node dist/engine.test.js && node dist/import.test.js && node integration.test.mjs && node ai.test.mjs","start":"node server.mjs"}}
