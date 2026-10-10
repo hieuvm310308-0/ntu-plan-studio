@@ -119,7 +119,7 @@ export function parseImportText(text, catalog = []) {
         continue;
       }
       const tail = line.slice(timeMatch.index + timeMatch[0].length).trim();
-      const typeMatch = tail.match(/\b(LEC|LECTURE|TUT|TUTORIAL|LAB|LABORATORY|SEM|SEMINAR)\b/);
+      const typeMatch = tail.match(/\b(LEC\/STUDIO|LEC|LECTURE|TUT|TUTORIAL|LAB|LABORATORY|SEM|SEMINAR|STUDIO|DES|PRJ)\b/);
       const type = typeMatch ? ({ LECTURE: 'LEC', TUTORIAL: 'TUT', LABORATORY: 'LAB', SEMINAR: 'SEM' }[typeMatch[1]] || typeMatch[1]) : 'CLASS';
       const venue = typeMatch ? tail.slice(typeMatch.index + typeMatch[0].length).replace(/^[\s,|:-]+/, '').trim() : '';
       sessions.push({ code: currentCode, day: DAY_NAMES.indexOf(dayMatch[1].slice(0, 3)), start, end, type, venue });

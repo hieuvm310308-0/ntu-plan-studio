@@ -10,6 +10,8 @@ assert.deepEqual(imported.matches, [{ code: 'SC1003', indexId: '10011' }]);
 assert.deepEqual(imported.sessions[0], { code: 'SC1003', day: 0, start: 540, end: 600, type: 'LEC', venue: 'LT2' });
 assert.equal(imported.sessions[1].day, 1);
 assert.equal(imported.sessions[1].start, 810);
+const weekend=parseImportText('SC1001 10001 SAT 09:30-10:20 LEC/STUDIO LT19A',[]).sessions[0];
+assert.equal(weekend.day,5);assert.equal(weekend.type,'LEC/STUDIO');assert.equal(weekend.venue,'LT19A');
 assert.deepEqual(parseImportText('SC1003\n10011', catalog).matches, [{ code: 'SC1003', indexId: '10011' }]);
 assert.deepEqual(parseImportText('10011', catalog).matches, [{ code: 'SC1003', indexId: '10011' }]);
 assert.ok(imported.warnings.length);
