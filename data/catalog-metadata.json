@@ -1,0 +1,208 @@
+{
+  "version": "2026-s1",
+  "academicYear": "2026/2027",
+  "semester": 1,
+  "retrievedAt": "2026-10-10T12:27:23.323452+00:00",
+  "source": "https://wish.wis.ntu.edu.sg/webexe/owa/aus_schedule.main",
+  "coverage": "Computer Science, Computer Engineering and Data Science & AI · Years 1–4 · Full-time",
+  "moduleCount": 82,
+  "indexCount": 1232,
+  "sessionCount": 3112,
+  "programmes": [
+    "CSC;;1;F",
+    "CSC;;2;F",
+    "CSC;;3;F",
+    "CSC;;4;F",
+    "CE;;1;F",
+    "CE;;2;F",
+    "CE;;3;F",
+    "CE;;4;F",
+    "DSAI;;1;F",
+    "DSAI;;2;F",
+    "DSAI;;3;F",
+    "DSAI;;4;F"
+  ],
+  "sources": [
+    {
+      "programme": "CSC;;1;F",
+      "url": "https://wish.wis.ntu.edu.sg/webexe/owa/AUS_SCHEDULE.main_display1",
+      "form": {
+        "acadsem": "2026;1",
+        "r_course_yr": "CSC;;1;F",
+        "r_subj_code": "",
+        "r_search_type": "F",
+        "boption": "CLoad",
+        "staff_access": "false"
+      },
+      "retrievedAt": "2026-10-10T12:27:01.295611+00:00",
+      "sha256": "5db2f56edabfaa20fb06647b4d88fb2c14a59174c3a47d26735584044edcf8c7",
+      "modules": 34
+    },
+    {
+      "programme": "CSC;;2;F",
+      "url": "https://wish.wis.ntu.edu.sg/webexe/owa/AUS_SCHEDULE.main_display1",
+      "form": {
+        "acadsem": "2026;1",
+        "r_course_yr": "CSC;;2;F",
+        "r_subj_code": "",
+        "r_search_type": "F",
+        "boption": "CLoad",
+        "staff_access": "false"
+      },
+      "retrievedAt": "2026-10-10T12:27:04.198092+00:00",
+      "sha256": "3913978a5d8ab2dbfa357db6b1220be964458007914032be816ee0e905b97e37",
+      "modules": 24
+    },
+    {
+      "programme": "CSC;;3;F",
+      "url": "https://wish.wis.ntu.edu.sg/webexe/owa/AUS_SCHEDULE.main_display1",
+      "form": {
+        "acadsem": "2026;1",
+        "r_course_yr": "CSC;;3;F",
+        "r_subj_code": "",
+        "r_search_type": "F",
+        "boption": "CLoad",
+        "staff_access": "false"
+      },
+      "retrievedAt": "2026-10-10T12:27:05.207769+00:00",
+      "sha256": "2a6dfa1a64cb59413990163ecc50ffcfe816959df645d75cc5f1370aa3bb43b1",
+      "modules": 28
+    },
+    {
+      "programme": "CSC;;4;F",
+      "url": "https://wish.wis.ntu.edu.sg/webexe/owa/AUS_SCHEDULE.main_display1",
+      "form": {
+        "acadsem": "2026;1",
+        "r_course_yr": "CSC;;4;F",
+        "r_subj_code": "",
+        "r_search_type": "F",
+        "boption": "CLoad",
+        "staff_access": "false"
+      },
+      "retrievedAt": "2026-10-10T12:27:06.255071+00:00",
+      "sha256": "ee477b0c01537e7cd84859e5cdcb8955eef5a09d4de4e01f01f89cf132ad2a2a",
+      "modules": 29
+    },
+    {
+      "programme": "CE;;1;F",
+      "url": "https://wish.wis.ntu.edu.sg/webexe/owa/AUS_SCHEDULE.main_display1",
+      "form": {
+        "acadsem": "2026;1",
+        "r_course_yr": "CE;;1;F",
+        "r_subj_code": "",
+        "r_search_type": "F",
+        "boption": "CLoad",
+        "staff_access": "false"
+      },
+      "retrievedAt": "2026-10-10T12:27:09.622823+00:00",
+      "sha256": "b47b5b34b968b54b36ff9307fc93aec529fa8c2cb63809861908d51c28914ca5",
+      "modules": 28
+    },
+    {
+      "programme": "CE;;2;F",
+      "url": "https://wish.wis.ntu.edu.sg/webexe/owa/AUS_SCHEDULE.main_display1",
+      "form": {
+        "acadsem": "2026;1",
+        "r_course_yr": "CE;;2;F",
+        "r_subj_code": "",
+        "r_search_type": "F",
+        "boption": "CLoad",
+        "staff_access": "false"
+      },
+      "retrievedAt": "2026-10-10T12:27:12.832135+00:00",
+      "sha256": "f74899c070796864733ac91129abf942306f4fa504741e2c9a82845e10b5527c",
+      "modules": 22
+    },
+    {
+      "programme": "CE;;3;F",
+      "url": "https://wish.wis.ntu.edu.sg/webexe/owa/AUS_SCHEDULE.main_display1",
+      "form": {
+        "acadsem": "2026;1",
+        "r_course_yr": "CE;;3;F",
+        "r_subj_code": "",
+        "r_search_type": "F",
+        "boption": "CLoad",
+        "staff_access": "false"
+      },
+      "retrievedAt": "2026-10-10T12:27:14.136380+00:00",
+      "sha256": "4158fc43ba7b103de82c7450ae4a0848ddf5d9d414d04bbaf580d71bf87e3fe0",
+      "modules": 28
+    },
+    {
+      "programme": "CE;;4;F",
+      "url": "https://wish.wis.ntu.edu.sg/webexe/owa/AUS_SCHEDULE.main_display1",
+      "form": {
+        "acadsem": "2026;1",
+        "r_course_yr": "CE;;4;F",
+        "r_subj_code": "",
+        "r_search_type": "F",
+        "boption": "CLoad",
+        "staff_access": "false"
+      },
+      "retrievedAt": "2026-10-10T12:27:15.214051+00:00",
+      "sha256": "450a118113c255e785fe62e4070b55cbf233a97a0dfa36bfc1db7d698ac6a541",
+      "modules": 28
+    },
+    {
+      "programme": "DSAI;;1;F",
+      "url": "https://wish.wis.ntu.edu.sg/webexe/owa/AUS_SCHEDULE.main_display1",
+      "form": {
+        "acadsem": "2026;1",
+        "r_course_yr": "DSAI;;1;F",
+        "r_subj_code": "",
+        "r_search_type": "F",
+        "boption": "CLoad",
+        "staff_access": "false"
+      },
+      "retrievedAt": "2026-10-10T12:27:18.205774+00:00",
+      "sha256": "443f5299726cb0ec61fe7dfafa11213ef9317db8c81f3317abeef6f2fc92726d",
+      "modules": 25
+    },
+    {
+      "programme": "DSAI;;2;F",
+      "url": "https://wish.wis.ntu.edu.sg/webexe/owa/AUS_SCHEDULE.main_display1",
+      "form": {
+        "acadsem": "2026;1",
+        "r_course_yr": "DSAI;;2;F",
+        "r_subj_code": "",
+        "r_search_type": "F",
+        "boption": "CLoad",
+        "staff_access": "false"
+      },
+      "retrievedAt": "2026-10-10T12:27:21.198466+00:00",
+      "sha256": "06d913791359be3acffc6cdcfd0540cad52602723c94d73dd041e0cfb290925b",
+      "modules": 22
+    },
+    {
+      "programme": "DSAI;;3;F",
+      "url": "https://wish.wis.ntu.edu.sg/webexe/owa/AUS_SCHEDULE.main_display1",
+      "form": {
+        "acadsem": "2026;1",
+        "r_course_yr": "DSAI;;3;F",
+        "r_subj_code": "",
+        "r_search_type": "F",
+        "boption": "CLoad",
+        "staff_access": "false"
+      },
+      "retrievedAt": "2026-10-10T12:27:22.273046+00:00",
+      "sha256": "70d1d91c7d2ebc149ec8749e83e9133d8603b43b40483eaadf8d7b337a2aa932",
+      "modules": 34
+    },
+    {
+      "programme": "DSAI;;4;F",
+      "url": "https://wish.wis.ntu.edu.sg/webexe/owa/AUS_SCHEDULE.main_display1",
+      "form": {
+        "acadsem": "2026;1",
+        "r_course_yr": "DSAI;;4;F",
+        "r_subj_code": "",
+        "r_search_type": "F",
+        "boption": "CLoad",
+        "staff_access": "false"
+      },
+      "retrievedAt": "2026-10-10T12:27:23.323452+00:00",
+      "sha256": "96e012a502d03bf1c2e2dd665cc318d094b19409b46e2a34ba12554d602b92fa",
+      "modules": 34
+    }
+  ],
+  "excluded": []
+}

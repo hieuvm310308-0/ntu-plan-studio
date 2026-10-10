@@ -28,7 +28,11 @@ Already have a timetable screenshot? Select **Import timetable**, review the ext
 
 ## Data and privacy
 
-The included catalogue is a demonstration dataset: its `DEMO-` indexes, class times, and venues are fictional. Import verified module/index data before using a plan for registration. See [the data guide](DATA.md) for the JSON format and official timetable sources.
+The included catalogue is sourced directly from NTU's public **AY 2026/27 Semester 1 Class Schedule**, retrieved on **10 October 2026**. It includes **82 modules, 1,232 indexes, and 3,112 class sessions** across full-time Computer Science, Computer Engineering, and Data Science & Artificial Intelligence, Years 1–4, including shared modules. Class groups, venues, teaching-week ranges, weekend classes, and every session belonging to each index are preserved.
+
+This is a dated snapshot, not a live vacancy feed or a university-wide catalogue. Verify final details in STARS before registration. See [the data guide](DATA.md) for coverage, provenance, and refreshing the catalogue. You can also import additional verified module data as JSON.
+
+Existing demo plans are upgraded to the official catalogue. Valid real index choices, explicit user imports, manual OCR indexes, and protected time are retained. Fictional or unavailable selections are removed with a notice; the earlier browser backup remains untouched. New users start with an empty plan.
 
 Plans are stored in your browser. Export a JSON backup to move them between devices or browsers. Image recognition runs locally using Tesseract.js; images are not uploaded to a recognition API. An internet connection is needed to download the OCR engine and English model on first use, and to load optional fonts. Pasting timetable text is also supported.
 
@@ -66,8 +70,21 @@ node dist/import.test.js
 node integration.test.mjs
 ```
 
-Tests cover scheduling boundaries, week-specific clashes, protected periods, locked indexes, infeasible schedules, text parsing, catalogue validation, and backup compatibility. Browser layout and end-to-end image OCR have not yet been verified through automated browser testing.
+Tests cover scheduling boundaries, week-specific clashes, weekends, protected periods, locked indexes, infeasible schedules, text parsing, catalogue validation, complete official index rows, and saved-plan migration. Browser layout and end-to-end image OCR have not yet been verified through automated browser testing.
+
+### Refresh official timetable data
+
+The refresh script queries the public NTU programme schedule for all four years of CS, CE, and DSAI. Python 3.10+ and Beautiful Soup are required only for refreshing data.
+
+```sh
+python -m pip install -r scripts/requirements.txt
+python scripts/refresh_catalog.py --year 2026 --semester 1
+python scripts/test_refresh_catalog.py
+node integration.test.mjs
+```
+
+The script writes `dist/catalog.js` and `data/catalog-metadata.json` after all twelve programme queries validate. It retains raw HTML locally under ignored `data/raw/` and records each response's SHA-256 hash, retrieval time, and query parameters in the metadata. Unsupported or incomplete indexes are reported in the metadata and excluded as a whole.
 
 ## About
 
-An independent project inspired by [NTUMods](https://ntumods.com/). Not affiliated with NTU or NTUMods. The interface and application code are original; no third-party project source or official timetable dataset is bundled.
+An independent project inspired by [NTUMods](https://ntumods.com/). Not affiliated with NTU or NTUMods. The interface and application code are original. Timetable facts are attributed to [NTU Class Schedule](https://wish.wis.ntu.edu.sg/webexe/owa/aus_schedule.main).

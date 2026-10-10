@@ -5,7 +5,7 @@ const MAX_VISITED = 120000;
 function sessionErrors(session) {
   if (!session || typeof session !== 'object') return ['Session must be an object.'];
   const errors = [];
-  if (!Number.isInteger(session.day) || session.day < 0 || session.day > 4) errors.push('Day must be 0–4 (Monday–Friday).');
+  if (!Number.isInteger(session.day) || session.day < 0 || session.day > 6) errors.push('Day must be 0–6 (Monday–Sunday).');
   if (!Number.isInteger(session.start) || !Number.isInteger(session.end) || session.start < 0 || session.end > 1440 || session.end <= session.start) errors.push('Session times must be valid minutes, with end after start.');
   if (session.weeks !== undefined && (!Array.isArray(session.weeks) || !session.weeks.length || session.weeks.some(w => !Number.isInteger(w) || w < 1 || w > 13))) errors.push('Weeks must contain semester week numbers 1–13.');
   return errors;
@@ -59,14 +59,14 @@ function scoreSessions(sessions) {
   let gaps = 0;
   let days = 0;
   for (const week of SEMESTER_WEEKS) {
-    for (let day = 0; day < 5; day++) {
+    for (let day = 0; day < 7; day++) {
       const meetings = sessions.filter(s => s.day === day && (s.weeks ?? SEMESTER_WEEKS).includes(week)).sort((a, b) => a.start - b.start);
       if (!meetings.length) continue;
       days++;
       for (let i = 1; i < meetings.length; i++) gaps += meetings[i].start - meetings[i - 1].end;
     }
   }
-  // All gap-minute totals dominate the possible 65 teaching-day tie breaker.
+  // All gap-minute totals dominate the possible 91 teaching-day tie breaker.
   return gaps * 100 + days;
 }
 

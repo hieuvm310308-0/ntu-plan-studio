@@ -9,3 +9,7 @@ site.tar.gz
 !.env.example
 .DS_Store
 Thumbs.db
+data/raw/
+data/source-form.html
+data/probe.html
+__pycache__/

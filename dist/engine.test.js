@@ -29,5 +29,7 @@ assert.equal(solve(modules, [], { maxResults: 1 }).solutions.length, 1);
 assert.deepEqual(solve(modules), solve(modules), 'Results are deterministic');
 assert.equal(solve([module('A', [['1', [a, session(0, 570, 620)]]])]).solutions.length, 0, 'An index must be internally clash-free');
 assert.equal(solve([modules[0], modules[0]]).solutions.length, 0, 'Duplicate codes are rejected');
-assert.equal(solve(modules, [session(5, 540, 600)]).solutions.length, 0);
+assert.equal(solve(modules, [session(7, 540, 600)]).solutions.length, 0);
+assert.equal(solve([module('W', [['1',[session(5,540,600)]]])],[session(5,570,620)]).solutions.length,0,'Saturday classes respect blocked time');
+assert.equal(solve([module('W', [['1',[session(6,540,600)]]])]).solutions.length,1,'Sunday classes are supported');
 console.log('Timetable engine: all checks passed.');

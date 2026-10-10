@@ -66,7 +66,7 @@ export async function recognizeImage(file, onProgress = () => {}) {
   }
 }
 
-const DAY_NAMES = ['MON', 'TUE', 'WED', 'THU', 'FRI'];
+const DAY_NAMES = ['MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT', 'SUN'];
 function minutes(value) {
   if (typeof value === 'number') return Number.isInteger(value) && value >= 0 && value <= 1440 ? value : NaN;
   const match = String(value).trim().match(/^(\d{1,2})[:.](\d{2})$/) || String(value).trim().match(/^(\d{2})(\d{2})$/);
@@ -84,7 +84,7 @@ export function parseImportText(text, catalog = []) {
   const lines = String(text || '').toUpperCase().replace(/[–—]/g, '-').split(/\r?\n/);
   for (const line of lines) {
     const codes = [...line.matchAll(/\b([A-Z]{2,4})\s?(\d{4})\b/g)]
-      .filter(match => !['MON', 'TUE', 'WED', 'THU', 'FRI', 'LEC', 'TUT', 'LAB', 'SEM'].includes(match[1]))
+      .filter(match => !['MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT', 'SUN', 'LEC', 'TUT', 'LAB', 'SEM'].includes(match[1]))
       .map(match => match[1] + match[2]);
     if (codes.length) currentCode = codes[0];
     const ids = [...line.matchAll(/\b(?:DEMO-\d{5}|IMPORTED-[A-F0-9]{6}|\d{5})\b/g)]
@@ -110,7 +110,7 @@ export function parseImportText(text, catalog = []) {
       }
       if (ids.length && !validIds.length) warnings.push(`No recognized index for ${code} on this line. Choose an index manually.`);
     }
-    const dayMatch = line.match(/\b(MON(?:DAY)?|TUE(?:S(?:DAY)?)?|WED(?:NESDAY)?|THU(?:R(?:S(?:DAY)?)?)?|FRI(?:DAY)?)\b/);
+    const dayMatch = line.match(/\b(MON(?:DAY)?|TUE(?:S(?:DAY)?)?|WED(?:NESDAY)?|THU(?:R(?:S(?:DAY)?)?)?|FRI(?:DAY)?|SAT(?:URDAY)?|SUN(?:DAY)?)\b/);
     const timeMatch = line.match(/\b(\d{1,2}[:.]\d{2}|\d{4})\s*(?:-|TO)\s*(\d{1,2}[:.]\d{2}|\d{4})\b/);
     if (currentCode && dayMatch && timeMatch) {
       const start = minutes(timeMatch[1]), end = minutes(timeMatch[2]);
@@ -158,7 +158,7 @@ export function parseCatalogJSON(text) {
         if (!session || typeof session !== 'object') fail(`index ${id} has an invalid session.`);
         const day = typeof session.day === 'number' ? session.day : DAY_NAMES.indexOf(String(session.day).toUpperCase().slice(0, 3));
         const start = minutes(session.start), end = minutes(session.end);
-        if (!Number.isInteger(day) || day < 0 || day > 4) fail(`index ${id}: day must be 0–4 or MON–FRI.`);
+        if (!Number.isInteger(day) || day < 0 || day > 6) fail(`index ${id}: day must be 0–6 or MON–SUN.`);
         if (!Number.isFinite(start) || !Number.isFinite(end) || end <= start) fail(`index ${id}: invalid start/end (use minutes or HH:MM).`);
         if (session.weeks !== undefined && (!Array.isArray(session.weeks) || !session.weeks.length || session.weeks.some(week => !Number.isInteger(week) || week < 1 || week > 13))) fail(`index ${id}: weeks must be an array of week numbers from 1 to 13.`);
         return { ...session, day, start, end, type: String(session.type || 'CLASS').trim().toUpperCase(), venue: String(session.venue || '').trim() };
